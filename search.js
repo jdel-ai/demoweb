@@ -1,4 +1,4 @@
-const pages = ['page1.html', 'page2.html']; // เพิ่มหน้าที่คุณต้องการค้นหา
+const pages = ['index2.html', 'page2.html']; // เพิ่มหน้าที่คุณต้องการค้นหา
 let searchResults = [];
 
 function search() {
