@@ -25,8 +25,24 @@
             font-size: 2.5em;
             color: #333;
         }
-        .gcse-search {
+        .results {
             margin-top: 20px;
+            text-align: left;
+        }
+        .result-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .result-item h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #007bff;
+        }
+        .result-item p {
+            margin: 0;
+            color: #555;
         }
     </style>
 </head>
@@ -34,11 +50,12 @@
 
 <div class="search-container">
     <h1>ค้นหาในเว็บไซต์</h1>
+    <input type="text" id="searchInput" placeholder="ค้นหาคำที่ต้องการ...">
+    <button onclick="search()">ค้นหา</button>
 
-    <!-- Google Custom Search Engine (CSE) -->
-    <script async src="https://cse.google.com/cse.js?cx=87a0503a0e3d64e7e"></script>
-    <div class="gcse-search"></div>
+    <div class="results" id="results"></div>
 </div>
 
+<script src="search.js"></script>
 </body>
 </html>
