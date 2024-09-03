@@ -23,7 +23,38 @@
         }
         h1 {
             font-size: 2.5em;
-            color: #333;
+            color: yellow;
+            border: 2px solid gray;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        .search-box {
+            position: relative;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-box input[type="text"] {
+            width: 70%;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเพื่อความสวยงาม */
+        }
+        .search-box button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 25px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            margin-left: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเพื่อความสวยงาม */
         }
         .results {
             margin-top: 20px;
@@ -44,14 +75,22 @@
             margin: 0;
             color: #555;
         }
+        .search-image {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="search-container">
-    <h1>ค้นหาในเว็บไซต์</h1>
-    <input type="text" id="searchInput" placeholder="ค้นหาคำที่ต้องการ...">
-    <button onclick="search()">ค้นหา</button>
+    <h1>C-Search</h1>
+    <div class="search-image">
+        <img src="imageweb/crobo.jpg" alt="Search Icon" width="100" height="100"> <!-- รูปภาพขนาด 100x100 -->
+    </div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ค้นหาคำที่ต้องการ...">
+        <button onclick="search()">ค้นหา</button>
+    </div>
 
     <div class="results" id="results"></div>
 </div>
