@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine ภายในเว็บไซต์</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ตอนที่ 1: Cover Page และ Links -->
+    <div class="section cover-page">
+        <img src="imageweb/coverpage.png" alt="Cover Image" class="img-cover">
+        <div class="links">
+            <a href="#about" class="link-item">เกี่ยวกับ C-Search</a>
+            <a href="#usage" class="link-item">วิธีใช้งาน</a>
+            <a href="#contact" class="link-item">ติดต่อเรา</a>
+        </div>
+    </div>
+
+    <!-- ตอนที่ 2: Clickable Cards -->
+    <div class="section cards">
+        <a href="page1.html" class="card">
+            <img src="imageweb/road.png" alt="ทางภาระจำยอม">
+            ทางภาระจำยอม
+        </a>
+        <a href="page2.html" class="card">
+            <img src="imageweb/owner.png" alt="กรรมสิทธิสิ่งปลูกสร้าง">
+            กรรมสิทธิสิ่งปลูกสร้าง
+        </a>
+        <a href="page3.html" class="card">
+            <img src="imageweb/etc.png" alt="ประเด็นอื่นๆ">
+            ประเด็นอื่นๆ
+        </a>
+    </div>
+
+<!-- ตอนที่ 3: Search Engine -->
+<div class="section search-engine">
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="ค้นหาคำที่ต้องการ...">
+            <button class="search-button">ค้นหา</button>
+        </div>
+    </div>
+</div>
+
+    <script src="search.js"></script>
+</body>
+</html>
