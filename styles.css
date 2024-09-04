@@ -61,6 +61,25 @@ body {
     margin-bottom: 10px;
 }
 
+.card {
+    flex: 1 1 180px; /* ลดขนาดลงจาก 200px */
+    max-width: 180px; /* กำหนดขนาดสูงสุดเพิ่มเติม */
+    padding: 10px;
+    margin: 5px;
+    background-color: transparent;
+    color: black;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* ลดเงาเมื่อไม่ hover */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* ทำให้การเปลี่ยนแปลงนุ่มนวล */
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* ขยับขึ้นเล็กน้อยเมื่อ hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* เพิ่มเงาเมื่อ hover */
+}
+
 .search-container {
     padding: 20px;
 }
