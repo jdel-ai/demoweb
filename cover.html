@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Engine ภายในเว็บไซต์</title>
+    <title>C-Search</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
 
     <!-- ตอนที่ 2: Clickable Cards -->
     <div class="section cards">
-        <a href="page1.html" class="card">
+        <a href="page1.html" class="card" data-link="page1.html">
             <img src="imageweb/road.png" alt="ทางภาระจำยอม">
             ทางภาระจำยอม
         </a>
@@ -33,16 +33,87 @@
         </a>
     </div>
 
-<!-- ตอนที่ 3: Search Engine -->
-<div class="section search-engine">
-    <div class="search-container">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="ค้นหาคำที่ต้องการ...">
-            <button class="search-button">ค้นหา</button>
+    <!-- ตอนที่ 3: Search Engine -->
+    <div class="section search-engine">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ค้นหาคำที่ต้องการ...">
+                <button class="search-button">ค้นหา</button>
+            </div>
         </div>
     </div>
-</div>
 
-    <script src="search.js"></script>
+    <!-- ส่วนที่เพิ่มเข้ามา: Container สำหรับแสดงผลลัพธ์การค้นหา -->
+    <div id="resultContainer" class="results"></div>
+
+    <!-- ส่วนที่สำคัญ: ฝังโค้ด JavaScript สำหรับการค้นหาเนื้อหาจากไฟล์ใน Directory -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pages = [
+                { title: "ทางภาระจำยอม", url: "page1.html" },
+                { title: "กรรมสิทธิสิ่งปลูกสร้าง", url: "page2.html" },
+                { title: "ประเด็นอื่นๆ", url: "page3.html" }
+            ];
+
+            document.querySelector('.search-button').addEventListener('click', function() {
+                const searchInput = document.getElementById('searchInput').value.toLowerCase();
+                if (!searchInput.trim()) {
+                    document.getElementById('resultContainer').innerHTML = '<p>กรุณาป้อนคำค้นหา.</p>';
+                    return;
+                }
+
+                let foundResults = false;
+                let fetchPromises = [];
+
+                pages.forEach(page => {
+                    fetchPromises.push(
+                        fetch(page.url)
+                            .then(response => {
+                                if (!response.ok) throw new Error('Network response was not ok');
+                                return response.text();
+                            })
+                            .then(content => {
+                                const lowerContent = content.toLowerCase();
+                                const index = lowerContent.indexOf(searchInput);
+                                if (index !== -1) {
+                                    foundResults = true;
+                                    const before = content.substring(0, index).split('\n');
+                                    const after = content.substring(index + searchInput.length).split('\n');
+
+                                    const resultDiv = document.createElement('div');
+                                    resultDiv.classList.add('result');
+
+                                    let displayText = "";
+                                    if (before.length > 1) {
+                                        displayText += `<p>${before[before.length - 2]}</p>`;
+                                    }
+                                    displayText += `<p>${before[before.length - 1]}</p>`;
+                                    displayText += `<p><mark>${content.substring(index, index + searchInput.length)}</mark></p>`;
+                                    if (after.length > 0) {
+                                        displayText += `<p>${after[0]}</p>`;
+                                    }
+                                    if (after.length > 1) {
+                                        displayText += `<p>${after[1]}</p>`;
+                                    }
+
+                                    resultDiv.innerHTML = `<h3><a href="${page.url}" target="_blank">${page.title}</a></h3>${displayText}`;
+                                    document.getElementById('resultContainer').appendChild(resultDiv);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error loading page:', error);
+                                document.getElementById('resultContainer').innerHTML = `<p>Error loading page: ${error.message}</p>`;
+                            })
+                    );
+                });
+
+                Promise.all(fetchPromises).then(() => {
+                    if (!foundResults) {
+                        document.getElementById('resultContainer').innerHTML = '<p>ไม่พบผลลัพธ์ที่ตรงกัน</p>';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

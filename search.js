@@ -1,47 +1,66 @@
-const pages = ['page1.html', 'page2.html']; // เพิ่มหน้าที่คุณต้องการค้นหา
+document.addEventListener("DOMContentLoaded", function() {
+    const pages = [
+        { title: "ทางภาระจำยอม", url: "page1.html" },
+        { title: "กรรมสิทธิสิ่งปลูกสร้าง", url: "page2.html" },
+        { title: "ประเด็นอื่นๆ", url: "page3.html" },
+        { title: "ป่าไม้", url: "forest.html" } // เพิ่มหน้าใหม่ที่นี่
+    ];
 
-function search() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    document.getElementById('results').innerHTML = ''; // ล้างผลการค้นหาก่อนหน้า
+    document.querySelector('.search-button').addEventListener('click', function() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        if (!searchInput.trim()) {
+            document.getElementById('resultContainer').innerHTML = '<p>กรุณาป้อนคำค้นหา.</p>';
+            return;
+        }
 
-    pages.forEach(page => {
-        fetch(page)
-            .then(response => response.text())
-            .then(data => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
-                const textContent = doc.body.textContent.toLowerCase();
+        let foundResults = false;
+        let fetchPromises = [];
 
-                if (textContent.includes(query)) {
-                    const title = doc.title || page;
-                    const snippet = getSnippet(textContent, query);
+        pages.forEach(page => {
+            fetchPromises.push(
+                fetch(page.url)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.text();
+                    })
+                    .then(content => {
+                        const lowerContent = content.toLowerCase();
+                        const index = lowerContent.indexOf(searchInput);
+                        if (index !== -1) {
+                            foundResults = true;
+                            const before = content.substring(0, index).split('\n');
+                            const after = content.substring(index + searchInput.length).split('\n');
 
-                    displayResult(title, snippet, page);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                            const resultDiv = document.createElement('div');
+                            resultDiv.classList.add('result');
+
+                            let displayText = "";
+                            if (before.length > 1) {
+                                displayText += `<p>${before[before.length - 2]}</p>`;
+                            }
+                            displayText += `<p>${before[before.length - 1]}</p>`;
+                            displayText += `<p><mark>${content.substring(index, index + searchInput.length)}</mark></p>`;
+                            if (after.length > 0) {
+                                displayText += `<p>${after[0]}</p>`;
+                            }
+                            if (after.length > 1) {
+                                displayText += `<p>${after[1]}</p>`;
+                            }
+
+                            resultDiv.innerHTML = `<h3><a href="${page.url}" target="_blank">${page.title}</a></h3>${displayText}`;
+                            document.getElementById('resultContainer').appendChild(resultDiv);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading page:', error);
+                    })
+            );
+        });
+
+        Promise.all(fetchPromises).then(() => {
+            if (!foundResults) {
+                document.getElementById('resultContainer').innerHTML = '<p>ไม่พบผลลัพธ์ที่ตรงกัน</p>';
+            }
+        });
     });
-}
-
-function getSnippet(content, query) {
-    const queryIndex = content.indexOf(query);
-    const start = Math.max(0, queryIndex - 50);
-    const end = Math.min(content.length, queryIndex + 50);
-    return content.substring(start, end);
-}
-
-function displayResult(title, snippet, url) {
-    const resultsContainer = document.getElementById('results');
-    const resultItem = document.createElement('div');
-    resultItem.classList.add('result-item');
-
-    const resultTitle = document.createElement('h2');
-    resultTitle.innerHTML = `<a href="${url}">${title}</a>`;
-    resultItem.appendChild(resultTitle);
-
-    const resultSnippet = document.createElement('p');
-    resultSnippet.textContent = `...${snippet}...`;
-    resultItem.appendChild(resultSnippet);
-
-    resultsContainer.appendChild(resultItem);
-}
+});
